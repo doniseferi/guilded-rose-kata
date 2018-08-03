@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace GildedRose.Console.Validator
 {
-    class SulfurasItemValidator : ItemValidator
+    class SulfurasItemValidator : IItemValidator
     {
         private readonly IEnumerable<string> _specialItemNames;
         private readonly int _specialItemQuality;

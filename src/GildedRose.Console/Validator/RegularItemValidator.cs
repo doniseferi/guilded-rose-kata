@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace GildedRose.Console.Validator
 {
-    class RegularItemValidator : ItemValidator
+    class RegularItemValidator : IItemValidator
     {
         private readonly int _minimumQuality;
         private readonly int _maximumQuality;

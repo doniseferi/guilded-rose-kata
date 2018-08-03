@@ -6,11 +6,11 @@ namespace GildedRose.Tests
 {
     public class ValidatorTests
     {
-        private ItemValidator _validator;
+        private IItemValidator _validator;
         private readonly IEnumerable<string> _increaseInQualityNames = new List<string> { "cheese" };
         private readonly IEnumerable<string> _specialNames = new List<string> { "special" };
 
-        public void SetValidator(ItemValidator validator) => _validator = validator;
+        public void SetValidator(IItemValidator validator) => _validator = validator;
 
         [Fact]
         public void IncreaseInQualityItemValidatorSuccessPath()

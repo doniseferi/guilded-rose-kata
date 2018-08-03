@@ -7,8 +7,9 @@ using GildedRose.Console.SpecialRulesHandler.NotExpired;
 
 namespace GildedRose.Console.Factory
 {
-    public class SpecialRulesHandlerFactory : ISpecialRulesHandlerFactory
+    class SpecialRulesHandlerFactory : ISpecialRulesHandlerFactory
     {
+        //todo create a special rules class
         private readonly IDictionary<Type, IQualityHandler> _specialRules;
 
         public SpecialRulesHandlerFactory()

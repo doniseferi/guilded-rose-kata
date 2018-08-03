@@ -12,7 +12,7 @@ namespace GildedRose.Tests
 
         public RuleFactoryShould()
         {
-            _ruleFactory = new RuleFactory(new SpecialRulesHandlerFactory());
+            _ruleFactory = new RuleFactory(new Rules());
         }
 
         [Fact]

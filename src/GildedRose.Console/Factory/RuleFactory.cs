@@ -1,40 +1,28 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using GildedRose.Console.Models;
 using GildedRose.Console.Rules;
+using _Rules = GildedRose.Console.Rules.Rules;
 
 namespace GildedRose.Console.Factory
 {
     class RuleFactory : IRuleFactory
     {
-        private readonly Dictionary<string, IItemRule> _rules;
+        private readonly _Rules _rules;
 
-        public RuleFactory(ISpecialRulesHandlerFactory specialRulesHandlerFactory)
+        public RuleFactory(Rules.Rules rules)
         {
-            _rules = new Dictionary<string, IItemRule>
-            {
-                ["NULL_ITEM"] = Create<NullItemItemRule>(),
-                ["Sulfuras"] = Create<SpecialItemItemRule>(),
-                ["Brie"] = Create<CheeseItemRule>(),
-                ["Backstage"] = Create<BackstagePassItemRule>(specialRulesHandlerFactory.CreateFor<BackstagePassItemRule>()),
-                ["Conjured"] = Create<ConjuredItemRule>(specialRulesHandlerFactory.CreateFor<ConjuredItemRule>()),
-                ["Default"] = Create<RegularItemItemRule>(specialRulesHandlerFactory.CreateFor<RegularItemItemRule>()),
-            };
+            _rules = rules;
         }
         
-        private T Create<T>(params object[] parameters) => (T)Activator.CreateInstance(typeof(T), parameters);
-
         public IItemRule GetRule(Item item)
         {
             if (item == null)
                 throw new ArgumentNullException();
 
-            var rule = _rules.Keys.FirstOrDefault(x => item.Name.Contains(x));
+            var rule = _rules.FirstOrDefault(x => item.Name.Contains(x.Key));
 
-            return rule != null 
-                ? _rules[rule] 
-                : _rules["Default"];
+            return rule.Value ?? _rules.First(x => x.Key.Contains("Default")).Value;
         }
     }
 }

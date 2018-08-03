@@ -3,14 +3,14 @@ using System.Linq;
 
 namespace GildedRose.Console.Validator
 {
-    class IncreaseInQualityItemValidator : ItemValidator
+    class IncreaseInQualityItemValidator : IItemValidator
     {
         private readonly IEnumerable<string> _increaseInQualityItemNames;
-        private readonly ItemValidator _regularItemValidator;
+        private readonly IItemValidator _regularItemValidator;
 
         public IncreaseInQualityItemValidator(
             IEnumerable<string> increaseInQualityItemNames, 
-            ItemValidator regularItemValidator)
+            IItemValidator regularItemValidator)
         {
             _increaseInQualityItemNames = increaseInQualityItemNames;
             _regularItemValidator = regularItemValidator;

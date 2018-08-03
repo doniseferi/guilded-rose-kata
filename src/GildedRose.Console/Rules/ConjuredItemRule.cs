@@ -6,7 +6,7 @@ namespace GildedRose.Console.Rules
 {
     class ConjuredItemRule : BaseItemRuleTemplate
     {
-        private IQualityHandler _qualityHandler;
+        private readonly IQualityHandler _qualityHandler;
 
         public ConjuredItemRule(IQualityHandler qualityHandler)
         {

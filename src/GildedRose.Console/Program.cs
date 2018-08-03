@@ -32,7 +32,6 @@ namespace GildedRose.Console
                     SellIn = 5,
                     Quality = 49
                 },
-                // this conjured item does not work properly yet
                 new Item {Name = "Conjured Mana Cake", SellIn = 3, Quality = 6}
             };
             var items = new Items(Items);

@@ -12,10 +12,8 @@ namespace GildedRose.Console.Rules
             if (item == null)
                 throw new ArgumentNullException(nameof(item));
 
-            item.Quality++;
-
-            if (item.Quality > MaximumQuality)
-                item.Quality = MaximumQuality;
+            if (item.Quality < MaximumQuality)
+                item.Quality++;
         }
     }
 }

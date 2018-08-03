@@ -5,7 +5,7 @@ using GildedRose.Console.Models;
 
 namespace GildedRose.Console.Updater
 {
-    public class ItemUpdater : IItemUpdater
+    class ItemUpdater : IItemUpdater
     {
         private readonly IRuleFactory _ruleFactory;
 

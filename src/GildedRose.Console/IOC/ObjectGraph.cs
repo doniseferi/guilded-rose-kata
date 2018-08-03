@@ -21,7 +21,7 @@ namespace GildedRose.Console.IOC
                     {
                         if (_itemUpdater == null)
                         {
-                            _itemUpdater = new ItemUpdater(new RuleFactory(new SpecialRulesHandlerFactory()));
+                            _itemUpdater = new ItemUpdater(new RuleFactory(new Rules.Rules()));
                         }
                     }
                 }
@@ -47,7 +47,7 @@ namespace GildedRose.Console.IOC
                             var specialItemValidator = new SulfurasItemValidator(specialItemName, 80);
                             var increaseInQualityValidator = new IncreaseInQualityItemValidator(increaseInValueNames, regularItemValidator);
 
-                            var itemValidators = new List<ItemValidator>
+                            var itemValidators = new List<IItemValidator>
                             {
                                 regularItemValidator,
                                 specialItemValidator,

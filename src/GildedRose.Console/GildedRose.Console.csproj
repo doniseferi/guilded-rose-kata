@@ -47,9 +47,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Factory\ISpecialRulesHandlerFactory.cs" />
+    <Compile Include="Rules\Rules.cs" />
     <Compile Include="Factory\SpecialRulesHandlerFactory.cs" />
     <Compile Include="IOC\ObjectGraph.cs" />
     <Compile Include="Models\Items.cs" />
+    <Compile Include="Exceptions\ItemsAreNullOrEmptyException.cs" />
     <Compile Include="Models\NullItem.cs" />
     <Compile Include="Rules\ConjuredItemRule.cs" />
     <Compile Include="SpecialRulesHandler\IQualityHandler.cs" />

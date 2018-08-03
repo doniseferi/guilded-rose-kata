@@ -6,11 +6,16 @@ namespace GildedRose.Console.Models
 {
     public class Items : IEnumerable<Item>
     {
-        private IReadOnlyCollection<Item> _items;
+        private readonly IReadOnlyCollection<Item> _items;
 
         public Items(IEnumerable<Item> items)
         {
-            _items = items.ToList();
+            var enumerable = items.ToList();
+
+            if (items == null || !enumerable.Any())
+                throw new ItemsAreNullOrEmpty();
+
+            _items = enumerable;
         }
 
         public IEnumerator<Item> GetEnumerator() 
