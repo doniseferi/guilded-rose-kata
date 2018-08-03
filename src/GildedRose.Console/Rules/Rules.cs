@@ -12,6 +12,7 @@ namespace GildedRose.Console.Rules
 
         public Rules()
         {
+            //todo this needs to move out of here and be passed in :-) refactor time
             var specialRulesHandlerFactory = new SpecialRulesHandlerFactory();
 
             _items = new Dictionary<string, IItemRule>

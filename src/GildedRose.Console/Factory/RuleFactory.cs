@@ -10,7 +10,7 @@ namespace GildedRose.Console.Factory
     {
         private readonly _Rules _rules;
 
-        public RuleFactory(Rules.Rules rules)
+        public RuleFactory(_Rules rules)
         {
             _rules = rules;
         }
