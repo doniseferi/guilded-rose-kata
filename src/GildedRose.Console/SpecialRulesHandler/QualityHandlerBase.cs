@@ -3,7 +3,7 @@ using GildedRose.Console.Models;
 
 namespace GildedRose.Console.SpecialRulesHandler
 {
-    public abstract class QualityHandlerBase : IQualityHandler
+    abstract class QualityHandlerBase : IQualityHandler
     {
         protected const int MaximumQuality = 50;
         protected const int MinimumQuality = 0;

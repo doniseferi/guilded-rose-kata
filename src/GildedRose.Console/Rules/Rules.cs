@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using GildedRose.Console.Factory;
 
 namespace GildedRose.Console.Rules
@@ -32,5 +33,9 @@ namespace GildedRose.Console.Rules
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
         public int Count => _items.Count;
+
+        public IItemRule Get(string rule) => 
+            _items.FirstOrDefault(x 
+                => rule.Contains(x.Key)).Value ?? _items["Default"];
     }
 }

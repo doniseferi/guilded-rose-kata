@@ -2,7 +2,7 @@
 
 namespace GildedRose.Console.SpecialRulesHandler.NotExpired
 {
-    public class BackstageSellIn5DaysOrLessHandler : QualityHandlerBase
+    class BackstageSellIn5DaysOrLessHandler : QualityHandlerBase
     {
         private const int MinimumSellInCanHandle = 5;
         private const int IncrementationValue = 3;

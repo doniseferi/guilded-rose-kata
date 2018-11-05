@@ -7,20 +7,15 @@ namespace GildedRose.Console.Factory
 {
     class ItemFactory : IItemFactory
     {
-        private readonly ItemValidators _validators;
+        private readonly IItemValidator _validator;
 
-        public ItemFactory(ItemValidators validators)
+        public ItemFactory(IItemValidator validators)
         {
-            _validators = validators ?? throw new ArgumentNullException(nameof(validators));
+            _validator = validators ?? throw new ArgumentNullException(nameof(validators));
         }
 
-        public Item Create(string itemName, int quality, int sellIn)
-        {
-            var availableValidator = 
-                _validators.FirstOrDefault(x 
-                    => x.IsValid(itemName, quality, sellIn));
-
-            return availableValidator != null
+        public Item Create(string itemName, int quality, int sellIn) =>
+            _validator.IsValid(itemName, quality, sellIn)
                 ? new Item
                 {
                     Name = itemName,
@@ -28,6 +23,5 @@ namespace GildedRose.Console.Factory
                     SellIn = sellIn
                 }
                 : new NullItem();
-        }
     }
 }

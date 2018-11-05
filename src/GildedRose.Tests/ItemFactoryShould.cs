@@ -7,7 +7,7 @@ namespace GildedRose.Tests
 {
     public class ItemFactoryShould
     {
-        private ItemFactory _itemFactory;
+        private IItemFactory _itemFactory;
         public ItemFactoryShould()
         {
             _itemFactory = ObjectGraph.ItemFactoryInstance;

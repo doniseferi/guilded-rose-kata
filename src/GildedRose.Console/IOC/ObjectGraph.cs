@@ -5,13 +5,13 @@ using GildedRose.Console.Validator;
 
 namespace GildedRose.Console.IOC
 {
-    class ObjectGraph
+    public class ObjectGraph
     {
         private static ItemUpdater _itemUpdater;
         private static ItemFactory _itemFactory;
         private static readonly object Lock = new object();
 
-        public static ItemUpdater UpdaterInstance
+        public static IItemUpdater UpdaterInstance
         {
             get
             {
@@ -30,7 +30,7 @@ namespace GildedRose.Console.IOC
             }
         }
 
-        public static ItemFactory ItemFactoryInstance
+        public static IItemFactory ItemFactoryInstance
         {
             get
             {
@@ -40,26 +40,34 @@ namespace GildedRose.Console.IOC
                     {
                         if (_itemFactory == null)
                         {
-                            var specialItemName = new List<string> { "Sulfuras" };
-                            var increaseInValueNames = new List<string> { "Tickets" };
-
-                            var regularItemValidator = new RegularItemValidator(0, 50, 0, specialItemName);
-                            var specialItemValidator = new SulfurasItemValidator(specialItemName, 80);
-                            var increaseInQualityValidator = new IncreaseInQualityItemValidator(increaseInValueNames, regularItemValidator);
-
-                            var itemValidators = new List<IItemValidator>
-                            {
-                                regularItemValidator,
-                                specialItemValidator,
-                                increaseInQualityValidator,
-                            };
-
-                            _itemFactory = new ItemFactory(new ItemValidators(itemValidators));
+                            _itemFactory = new ItemFactory(Valdators);
                         }
                     }
                 }
                 return _itemFactory;
             }
         }
+
+        public static IItemValidator Valdators
+        {
+            get
+            {
+                var specialItemName = new List<string> { "Sulfuras" };
+                var increaseInValueNames = new List<string> { "Tickets" };
+
+                var regularItemValidator = new RegularItemValidator(0, 50, 0, specialItemName);
+                var specialItemValidator = new SulfurasItemValidator(specialItemName, 80);
+                var increaseInQualityValidator = new IncreaseInQualityItemValidator(increaseInValueNames, regularItemValidator);
+
+                return new ItemValidators(new List<IItemValidator>
+                {
+                    regularItemValidator,
+                    specialItemValidator,
+                    increaseInQualityValidator,
+                });
+            }
+        }
+
+        public static IRuleFactory RuleFactory => new RuleFactory(new Rules.Rules());
     }
 }

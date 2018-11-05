@@ -7,9 +7,9 @@ using Xunit;
 
 namespace GildedRose.Tests
 {
-    public class RegularItemsShould
+    class RegularItemsShould
     {
-        private readonly ItemFactory _itemFactory;
+        private readonly IItemFactory _itemFactory;
 
         public RegularItemsShould()
         {

@@ -7,6 +7,9 @@ using GildedRose.Console.SpecialRulesHandler.NotExpired;
 
 namespace GildedRose.Console.Factory
 {
+    //todo create factory to do rules
+    //and the child factories will take care of what types
+    //where this is a subtype
     class SpecialRulesHandlerFactory : ISpecialRulesHandlerFactory
     {
         //todo create a special rules class

@@ -2,7 +2,7 @@
 
 namespace GildedRose.Console.SpecialRulesHandler.NotExpired
 {
-    public class BackstageSellIn11DaysOrMoreHandler : QualityHandlerBase
+    class BackstageSellIn11DaysOrMoreHandler : QualityHandlerBase
     {
         private const int MinimumSellInCanHandle = 11;
         

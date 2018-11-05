@@ -9,7 +9,7 @@ namespace GildedRose.Tests
 {
     public class SulfurasItemsShould
     {
-        private readonly ItemFactory _itemFactory;
+        private readonly IItemFactory _itemFactory;
 
         public SulfurasItemsShould()
         {

@@ -1,6 +1,6 @@
 ﻿namespace GildedRose.Console.Models
 {
-    internal class NullItem : Item
+    public class NullItem : Item
     {
         public NullItem()
         {
