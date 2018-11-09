@@ -19,9 +19,9 @@ namespace GildedRose.Console.Factory
         {
             _specialRules = new Dictionary<Type, IQualityHandler>
             {
-                [typeof(BackstagePassItemRule)] = CreateForBackstagePass(),
-                [typeof(RegularItemItemRule)] = CreateForRegularItems(),
-                [typeof(ConjuredItemRule)] = CreateForConjuredItems(),
+                [typeof(BackstagePassItemRule)] = CreateBackstagePassHandler(),
+                [typeof(RegularItemItemRule)] = CreateRegularItemsHandler(),
+                [typeof(ConjuredItemRule)] = CreateConjuredItemsHandler(),
             };
         }
 
@@ -32,17 +32,17 @@ namespace GildedRose.Console.Factory
             return handler ?? throw new KeyNotFoundException();
         }
 
-        private static IQualityHandler CreateForBackstagePass()
+        private static IQualityHandler CreateBackstagePassHandler()
             => new ExpiredBackstageEventQualityHandler(
                 new BackstageSellIn5DaysOrLessHandler(
                         new BackstageSellIn10DaysOrLessHandler(
                             new BackstageSellIn11DaysOrMoreHandler())));
 
-        private static IQualityHandler CreateForRegularItems()
+        private static IQualityHandler CreateRegularItemsHandler()
             => new NotExpiredRegularItemsQualityHandler(
                 new ExpiredRegularItemsQualityHandler());
 
-        private IQualityHandler CreateForConjuredItems()
+        private IQualityHandler CreateConjuredItemsHandler()
             => new NotExpiredConjuredItemsQualityHandler(
                 new ExpiredConjuredItemsQualityHandler());
     }
