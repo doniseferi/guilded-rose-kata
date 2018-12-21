@@ -3,16 +3,19 @@ using System.Linq;
 using GildedRose.Console.Factory;
 using GildedRose.Console.IOC;
 using GildedRose.Console.Models;
+using GildedRose.Console.Updater;
 using Xunit;
 
 namespace GildedRose.Tests
 {
     public class ConjuredItemsShould
     {
+        private readonly IItemUpdater _itemUpdater;
         private readonly IItemFactory _itemFactory;
 
         public ConjuredItemsShould()
         {
+            _itemUpdater = ObjectGraph.UpdaterInstance;
             _itemFactory = ObjectGraph.ItemFactoryInstance;
         }
 
@@ -29,11 +32,12 @@ namespace GildedRose.Tests
 
             var items = new Items(conjuredItems);
 
-            items.InvokeOnEachDayCycle(4, () =>
+            for (int i = 0; i < 4; i++)
             {
+                _itemUpdater.Update(items);
                 quality -= 2;
                 Assert.Equal(quality, items.First().Quality);
-            });
+            }
         }
 
         [Fact]
@@ -49,11 +53,12 @@ namespace GildedRose.Tests
 
             var items = new Items(conjuredItems);
 
-            items.InvokeOnEachDayCycle(3, () =>
+            for (int i = 0; i < 3; i++)
             {
+                _itemUpdater.Update(items);
                 quality -= 4;
                 Assert.Equal(quality, items.First().Quality);
-            });
+            }
         }
 
 
@@ -70,11 +75,12 @@ namespace GildedRose.Tests
 
             var items = new Items(conjuredItems);
 
-            items.InvokeOnEachDayCycle(4, () =>
+            for (int i = 0; i < 4; i++)
             {
+                _itemUpdater.Update(items);
                 Assert.True(items.First().Quality < quality);
                 quality--;
-            });
+            }
         }
 
         [Fact]
@@ -90,10 +96,12 @@ namespace GildedRose.Tests
 
             var items = new Items(regularItems);
 
-            items.InvokeOnCompletionOfAllCycles(10, () =>
+            for (int i = 0; i < 10; i++)
             {
-                Assert.Equal(0, items.First().Quality); 
-            });
+                _itemUpdater.Update(items);
+            }
+
+            Assert.Equal(0, items.First().Quality);
         }
     }
 }

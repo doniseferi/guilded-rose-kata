@@ -3,16 +3,19 @@ using System.Linq;
 using GildedRose.Console.Factory;
 using GildedRose.Console.IOC;
 using GildedRose.Console.Models;
+using GildedRose.Console.Updater;
 using Xunit;
 
 namespace GildedRose.Tests
 {
-    class BackStageTicketItemsShould
+    public class BackStageTicketItemsShould
     {
+        private readonly IItemUpdater _itemUpdater;
         private readonly IItemFactory _itemFactory;
 
         public BackStageTicketItemsShould()
         {
+            _itemUpdater = ObjectGraph.UpdaterInstance;
             _itemFactory = ObjectGraph.ItemFactoryInstance;
         }
 
@@ -22,15 +25,19 @@ namespace GildedRose.Tests
             var quality = 10;
             var sellIn = 15;
 
-            var itemCollection = new List<Item> {_itemFactory.Create("Backstage passes to a TAFKAL80ETC concert", quality, sellIn)};
+            var itemCollection = new List<Item>
+            {
+                _itemFactory.Create("Backstage passes to a TAFKAL80ETC concert", quality, sellIn)
+            };
 
             var items = new Items(itemCollection);
 
-            items.InvokeOnEachDayCycle(5, () =>
+            for (int i = 0; i < 5; i++)
             {
+                _itemUpdater.Update(items);
                 quality++;
                 Assert.Equal(quality, items.First().Quality);
-            });
+            }
         }
 
         [Fact]
@@ -39,14 +46,18 @@ namespace GildedRose.Tests
             var quality = 10;
             var sellIn = 10;
 
-            var itemCollection = new List<Item> { _itemFactory.Create("Backstage passes to a TAFKAL80ETC concert", quality, sellIn) };
+            var itemCollection = new List<Item>
+            {
+                _itemFactory.Create("Backstage passes to a TAFKAL80ETC concert", quality, sellIn)
+            };
             var items = new Items(itemCollection);
 
-            items.InvokeOnEachDayCycle(5, () =>
+            for (int i = 0; i < 5; i++)
             {
+                _itemUpdater.Update(items);
                 quality += 2;
                 Assert.Equal(quality, items.First().Quality);
-            });
+            }
         }
 
         [Fact]
@@ -55,15 +66,19 @@ namespace GildedRose.Tests
             var quality = 10;
             var sellIn = 5;
 
-            var itemCollection = new List<Item> { _itemFactory.Create("Backstage passes to a TAFKAL80ETC concert", quality, sellIn) };
+            var itemCollection = new List<Item>
+            {
+                _itemFactory.Create("Backstage passes to a TAFKAL80ETC concert", quality, sellIn)
+            };
 
             var items = new Items(itemCollection);
 
-            items.InvokeOnEachDayCycle(5, () =>
+            for (int i = 0; i < 5; i++)
             {
+                _itemUpdater.Update(items);
                 quality += 3;
                 Assert.Equal(quality, items.First().Quality);
-            });
+            }
         }
 
         [Fact]
@@ -72,14 +87,20 @@ namespace GildedRose.Tests
             var quality = 10;
             var sellIn = 5;
 
-            var itemCollection = new List<Item> { _itemFactory.Create("Backstage passes to a TAFKAL80ETC concert", quality, sellIn) };
+            var itemCollection = new List<Item>
+            {
+                _itemFactory.Create("Backstage passes to a TAFKAL80ETC concert", quality, sellIn)
+            };
 
             var items = new Items(itemCollection);
 
-            items.InvokeOnCompletionOfAllCycles(6, () =>
-            {
-                Assert.Equal(0, items.First().Quality);
-            });
+            var expectedQuality = 0;
+
+            new zAssert().After(() => _itemUpdater.Update(items))
+                .Executes(6)
+                .That(items.First().Quality)
+                .IsEqualTo(expectedQuality)
+                .Assert();
         }
 
         [Fact]
@@ -88,14 +109,21 @@ namespace GildedRose.Tests
             var quality = 45;
             var sellIn = 20;
 
-            var itemCollection = new List<Item> { _itemFactory.Create("Backstage passes to a TAFKAL80ETC concert", quality, sellIn) };
+            var itemCollection = new List<Item>
+            {
+                _itemFactory.Create("Backstage passes to a TAFKAL80ETC concert", quality, sellIn)
+            };
 
             var items = new Items(itemCollection);
 
-            items.InvokeOnCompletionOfAllCycles(15, () =>
-            {
-                Assert.Equal(50, items.First().Quality);
-            });
+            var expectedQuality = 50;
+
+            new zAssert()
+                .After(() => _itemUpdater.Update(items))
+                .Executes(15)
+                .That(items.First().Quality)
+                .IsEqualTo(expectedQuality)
+                .Assert();
         }
 
         [Fact]
@@ -104,14 +132,22 @@ namespace GildedRose.Tests
             var quality = 5;
             var sellIn = 20;
 
-            var itemCollection = new List<Item> { _itemFactory.Create("Backstage passes to a TAFKAL80ETC concert", quality, sellIn) };
+            var itemCollection = new List<Item>
+            {
+                _itemFactory.Create("Backstage passes to a TAFKAL80ETC concert", quality, sellIn)
+            };
 
             var items = new Items(itemCollection);
 
-            items.InvokeOnCompletionOfAllCycles(30, () =>
-            {
-                Assert.Equal(0, items.First().Quality);
-            });
+            var expectedQuality = 0;
+
+            new zAssert()
+                .After(() => _itemUpdater.Update(items))
+                .Executes(30)
+                .That(items.First().Quality)
+                .IsEqualTo(expectedQuality)
+                .Assert();
+
         }
 
         [Fact]
@@ -120,15 +156,27 @@ namespace GildedRose.Tests
             var quality = 5;
             var sellIn = 1;
 
-            var itemCollection = new List<Item> { _itemFactory.Create("Backstage passes to a TAFKAL80ETC concert", quality, sellIn) };
+            var itemCollection = new List<Item>
+            {
+                _itemFactory.Create("Backstage passes to a TAFKAL80ETC concert", quality, sellIn)
+            };
 
             var items = new Items(itemCollection);
 
-            items.InvokeOnCompletionOfAllCycles(1, () =>
-            {
-                Assert.Equal(0, items.First().SellIn);
-                Assert.Equal(8, items.First().Quality);
-            });
+            _itemUpdater.Update(items);
+
+            var expectedSellIn = 0;
+            var expectedQuality = 8;
+
+            new zAssert()
+                .That(items.First().SellIn)
+                .IsEqualTo(expectedSellIn)
+                .And()
+                .That(items.First().Quality)
+                .IsEqualTo(expectedQuality)
+                .After(() => _itemUpdater.Update(items))
+                .Executes(30)
+                .Assert();
         }
     }
 }

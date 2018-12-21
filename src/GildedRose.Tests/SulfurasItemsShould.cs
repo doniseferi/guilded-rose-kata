@@ -3,16 +3,19 @@ using System.Linq;
 using GildedRose.Console.Factory;
 using GildedRose.Console.IOC;
 using GildedRose.Console.Models;
+using GildedRose.Console.Updater;
 using Xunit;
 
 namespace GildedRose.Tests
 {
     public class SulfurasItemsShould
     {
+        private readonly IItemUpdater _itemUpdater;
         private readonly IItemFactory _itemFactory;
 
         public SulfurasItemsShould()
         {
+            _itemUpdater = ObjectGraph.UpdaterInstance;
             _itemFactory = ObjectGraph.ItemFactoryInstance;
         }
 
@@ -23,10 +26,11 @@ namespace GildedRose.Tests
 
             var items = new Items(sulfuras);
 
-            items.InvokeOnEachDayCycle(10, () =>
+            for (int i = 0; i < 10; i++)
             {
+                _itemUpdater.Update(items);
                 Assert.Equal(0, items.First().SellIn);
-            });
+            }
 
         }
 
@@ -37,10 +41,11 @@ namespace GildedRose.Tests
 
             var items = new Items(sulfuras);
 
-            items.InvokeOnEachDayCycle(10, () =>
+            for (int i = 0; i < 10; i++)
             {
+                _itemUpdater.Update(items);
                 Assert.Equal(80, items.First().Quality);
-            });
+            }
         }
     }
 }

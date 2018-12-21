@@ -5,11 +5,20 @@ using GildedRose.Console.Validator;
 
 namespace GildedRose.Console.IOC
 {
+    /// <summary>
+    /// This class exists solely because this refactoring exercise was complete
+    /// without any packages. This class is responsible for creating an object graph
+    /// which would be done by a ioc container. This is here only so that there are no
+    /// dependencies on packages.
+    /// </summary>
     public class ObjectGraph
     {
         private static ItemUpdater _itemUpdater;
         private static ItemFactory _itemFactory;
-        private static readonly object Lock = new object();
+        private static IItemValidator _validators;
+        private static readonly object ItemFactoryLock = new object();
+        private static readonly object ItemUpdaterLock = new object();
+        private static readonly object ItemValidatorLock = new object();
 
         public static IItemUpdater UpdaterInstance
         {
@@ -17,7 +26,7 @@ namespace GildedRose.Console.IOC
             {
                 if (_itemUpdater == null)
                 {
-                    lock (Lock)
+                    lock (ItemUpdaterLock)
                     {
                         if (_itemUpdater == null)
                         {
@@ -36,7 +45,7 @@ namespace GildedRose.Console.IOC
             {
                 if (_itemFactory == null)
                 {
-                    lock (Lock)
+                    lock (ItemFactoryLock)
                     {
                         if (_itemFactory == null)
                         {
@@ -44,6 +53,7 @@ namespace GildedRose.Console.IOC
                         }
                     }
                 }
+
                 return _itemFactory;
             }
         }
@@ -52,22 +62,32 @@ namespace GildedRose.Console.IOC
         {
             get
             {
-                var specialItemName = new List<string> { "Sulfuras" };
-                var increaseInValueNames = new List<string> { "Tickets" };
-
-                var regularItemValidator = new RegularItemValidator(0, 50, 0, specialItemName);
-                var specialItemValidator = new SulfurasItemValidator(specialItemName, 80);
-                var increaseInQualityValidator = new IncreaseInQualityItemValidator(increaseInValueNames, regularItemValidator);
-
-                return new ItemValidators(new List<IItemValidator>
+                if (_validators == null)
                 {
-                    regularItemValidator,
-                    specialItemValidator,
-                    increaseInQualityValidator,
-                });
+                    lock (ItemValidatorLock)
+                    {
+                        if (_validators == null)
+                        {
+                            var specialItemName = new List<string> {"Sulfuras"};
+                            var increaseInValueNames = new List<string> {"Tickets"};
+
+                            var regularItemValidator = new RegularItemValidator(0, 50, 0, specialItemName);
+                            var specialItemValidator = new SulfurasItemValidator(specialItemName, 80);
+                            var increaseInQualityValidator =
+                                new IncreaseInQualityItemValidator(increaseInValueNames, regularItemValidator);
+
+                            _validators = new ItemValidators(new List<IItemValidator>
+                            {
+                                regularItemValidator,
+                                specialItemValidator,
+                                increaseInQualityValidator,
+                            });
+                        }
+                    }
+                }
+
+                return _validators;
             }
         }
-
-        public static IRuleFactory RuleFactory => new RuleFactory(new Rules.Rules());
     }
 }

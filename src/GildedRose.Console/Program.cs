@@ -1,14 +1,21 @@
 ﻿using System.Collections.Generic;
 using GildedRose.Console.IOC;
 using GildedRose.Console.Models;
+using GildedRose.Console.Updater;
 
 namespace GildedRose.Console
 {
     public class Program
     {
+        private static IItemUpdater _itemUpdater; 
+        public Program()
+        {
+            _itemUpdater = ObjectGraph.UpdaterInstance;
+        }
+
         static void Main(string[] args)
         {
-            IList<Item> initItems = new List<Item>
+            var items = new List<Item>
             {
                 new Item {Name = "+5 Dexterity Vest", SellIn = 10, Quality = 20},
                 new Item {Name = "Aged Brie", SellIn = 2, Quality = 0},
@@ -21,14 +28,7 @@ namespace GildedRose.Console
                 new Item {Name = "Conjured Mana Cake", SellIn = 3, Quality = 6}
             };
 
-            var items = new Items(initItems);
-
-            UpdateQuality(items);
-        }
-
-        public static void UpdateQuality(Items items)
-        {
-            ObjectGraph.UpdaterInstance.Update(items);
+            _itemUpdater.Update(new Items(items));
         }
     }
 }

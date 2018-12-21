@@ -3,16 +3,19 @@ using System.Linq;
 using GildedRose.Console.Factory;
 using GildedRose.Console.IOC;
 using GildedRose.Console.Models;
+using GildedRose.Console.Updater;
 using Xunit;
 
 namespace GildedRose.Tests
 {
     class RegularItemsShould
     {
+        private readonly IItemUpdater _itemUpdater;
         private readonly IItemFactory _itemFactory;
 
         public RegularItemsShould()
         {
+            _itemUpdater = ObjectGraph.UpdaterInstance;
             _itemFactory = ObjectGraph.ItemFactoryInstance;
         }
 
@@ -29,11 +32,12 @@ namespace GildedRose.Tests
 
             var items = new Items(regularItems);
 
-            items.InvokeOnEachDayCycle(40, () =>
+            for (int i = 0; i < 40; i++)
             {
+                _itemUpdater.Update(items);
                 quality--;
                 Assert.Equal(quality, items.First().Quality);
-            });
+            }
         }
 
         [Fact]
@@ -49,11 +53,12 @@ namespace GildedRose.Tests
 
             var items = new Items(regularItems);
 
-            items.InvokeOnEachDayCycle(5, () =>
+            for (int i = 0; i < 5; i++)
             {
+                _itemUpdater.Update(items);
                 quality -= 2;
                 Assert.Equal(quality, items.First().Quality);
-            });
+            }
 
             Assert.Equal(0, items.First().Quality);
         }
@@ -71,11 +76,12 @@ namespace GildedRose.Tests
 
             var items = new Items(regularItems);
 
-            items.InvokeOnEachDayCycle(40, () =>
+            for (int i = 0; i < 40; i++)
             {
+                _itemUpdater.Update(items);
                 Assert.True(items.First().Quality < quality);
                 quality--;
-            });
+            }
         }
 
         [Fact]
@@ -89,12 +95,13 @@ namespace GildedRose.Tests
 
             var items = new Items(regularItems);
 
-
-            items.InvokeOnCompletionOfAllCycles(50, () =>
+            for (int i = 0; i < 50; i++)
             {
-                items.ToList()
-                    .ForEach(item => Assert.Equal(0, item.Quality));
-            });
+                _itemUpdater.Update(items);
+            }
+
+            items.ToList()
+                .ForEach(item => Assert.Equal(0, item.Quality));
         }
     }
 }
